@@ -554,17 +554,83 @@ class UltimateDesktop(Desktop):
         win.protocol('WM_DELETE_WINDOW',lambda:(save(),win.destroy()))
 
     def browser(self):
-        win=self.window('Web Browser Launcher',620,220)
-        tk.Label(win,text='🌐 Open a website in your default browser',bg=self.panel,fg=self.fg,
-                 font=('DejaVu Sans',16)).pack(pady=18)
-        url=tk.StringVar(value='https://www.wikipedia.org')
-        entry=tk.Entry(win,textvariable=url,font=('DejaVu Sans',13));entry.pack(fill='x',padx=20,pady=8)
-        def open_url():
-            address=url.get().strip()
-            if not address.startswith(('https://','http://')):address='https://'+address
-            webbrowser.open(address)
-        tk.Button(win,text='Go',command=open_url,width=16).pack(pady=8)
-        entry.bind('<Return>',lambda e:open_url())
+        """Embedded HTML browser powered by optional tkinterweb (limited JavaScript)."""
+        win = self.window('Terminal 11 Browser', 1060, 720)
+        toolbar = tk.Frame(win, bg=self.panel)
+        toolbar.pack(fill='x', padx=8, pady=8)
+        address = tk.StringVar(value='https://www.wikipedia.org')
+        status = tk.StringVar(value='Ready')
+        history = []
+        position = [-1]
+
+        try:
+            from tkinterweb import HtmlFrame
+        except ImportError:
+            tk.Label(win, text='Browser engine not installed', bg=self.panel, fg=self.fg,
+                     font=('DejaVu Sans', 19, 'bold')).pack(pady=20)
+            tk.Label(win, text='Install tkinterweb to browse inside Terminal 11:',
+                     bg=self.panel, fg=self.fg).pack(pady=6)
+            tk.Label(win, text='Windows: py -m pip install tkinterweb\n'
+                               'Raspberry Pi: use the install-pi-browser.sh script',
+                     bg=self.panel, fg=self.fg, justify='left').pack(pady=8)
+            tk.Button(win, text='Open in system browser',
+                      command=lambda: webbrowser.open(address.get())).pack(pady=10)
+            tk.Entry(win, textvariable=address, width=65).pack(pady=8)
+            return
+
+        view = HtmlFrame(win, messages_enabled=False)
+        view.pack(fill='both', expand=True, padx=8, pady=(0, 4))
+        tk.Label(win, textvariable=status, bg=self.panel, fg=self.fg, anchor='w').pack(
+            fill='x', padx=10, pady=(0, 6))
+
+        def normalize(raw):
+            raw = raw.strip()
+            if not raw:
+                return None
+            if raw.startswith(('https://', 'http://')):
+                return raw
+            if ' ' in raw or '.' not in raw:
+                from urllib.parse import quote_plus
+                return 'https://www.google.com/search?q=' + quote_plus(raw)
+            return 'https://' + raw
+
+        def navigate(target=None, record=True):
+            target = normalize(target if target is not None else address.get())
+            if not target:
+                return
+            address.set(target)
+            status.set('Loading ' + target)
+            try:
+                view.load_website(target)
+                if record:
+                    del history[position[0] + 1:]
+                    history.append(target)
+                    position[0] = len(history) - 1
+                status.set('Loaded (some modern websites require JavaScript)')
+            except Exception as exc:
+                status.set('Could not load page: ' + str(exc))
+
+        def step(direction):
+            index = position[0] + direction
+            if 0 <= index < len(history):
+                position[0] = index
+                navigate(history[index], record=False)
+
+        def home():
+            navigate('https://www.wikipedia.org')
+
+        for label, command in [('←', lambda: step(-1)), ('→', lambda: step(1)),
+                               ('⟳', lambda: navigate(record=False)), ('⌂', home)]:
+            tk.Button(toolbar, text=label, command=command, bg=self.button, fg=self.fg,
+                      bd=0, width=3, font=('DejaVu Sans', 13)).pack(side='left', padx=2)
+        field = tk.Entry(toolbar, textvariable=address, font=('DejaVu Sans', 12))
+        field.pack(side='left', fill='x', expand=True, padx=6)
+        field.bind('<Return>', lambda _e: navigate())
+        tk.Button(toolbar, text='Go', command=navigate, bg=self.button, fg=self.fg,
+                  bd=0, width=6).pack(side='left', padx=3)
+        tk.Button(toolbar, text='External ↗', command=lambda: webbrowser.open(address.get()),
+                  bg=self.button, fg=self.fg, bd=0).pack(side='left', padx=3)
+        navigate(address.get())
 
     def task_manager(self):
         win=self.window('Task Manager',630,450)

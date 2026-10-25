@@ -1,1 +1,1 @@
-# No pip dependencies. Tkinter is provided by the OS/Python installation.
+tkinterweb>=4.0,<5

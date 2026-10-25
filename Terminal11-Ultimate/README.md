@@ -80,3 +80,25 @@ Bug reports, feature ideas, and pull requests are welcome. See [CONTRIBUTING.md]
 ## License
 
 No open-source license has been selected yet. Until one is added, normal copyright restrictions apply. The repository owner can add a license through GitHub's **Add file → Create new file → LICENSE** flow.
+
+
+## Built-in web browser
+
+The **Browser** app now displays web pages inside Terminal 11 with an address/search bar, back, forward, reload, home and external-browser controls. It uses the optional `tkinterweb` HTML renderer. **This is not a full Chrome/Firefox engine**: many JavaScript-heavy websites, streaming services, and sign-in flows will not work. Use **External** for those sites.
+
+### Windows
+
+```cmd
+py -m pip install -r requirements.txt
+py terminal11.py
+```
+
+### Raspberry Pi OS Desktop
+
+```bash
+cd Terminal11-Ultimate
+bash install-pi-browser.sh
+./run-pi.sh
+```
+
+A graphical desktop session and internet connection are required. The installer creates a `.venv` directory; do not commit that directory to GitHub.
