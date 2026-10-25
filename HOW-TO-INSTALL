@@ -1,0 +1,233 @@
+# 🖥️ Terminal 11 Ultimate — Installation Guide
+
+Welcome to **Terminal 11 Ultimate!**
+
+Terminal 11 Ultimate is a Windows 11-inspired desktop application built with Python. It includes a Start Menu, taskbar, File Explorer, built-in terminal, Settings, Notepad, games, and more!
+
+It supports **Windows 10/11** and **Raspberry Pi 4 running Raspberry Pi OS Desktop**.
+
+## 📥 Step 1 — Download Terminal 11 Ultimate
+
+1. Open this GitHub repository.
+2. Click the green **Code** button.
+3. Select **Download ZIP**.
+4. Extract the downloaded ZIP file.
+5. Open the extracted project folder.
+
+Alternatively, you can clone the repository using Git:
+
+```bash
+git clone https://github.com/YOUR-USERNAME/Terminal11-Ultimate.git
+cd Terminal11-Ultimate
+```
+
+Replace `YOUR-USERNAME` with the actual GitHub username of the project owner.
+
+---
+
+## 🪟 Installing on Windows 10/11
+
+### Step 1 — Install Python
+
+1. Visit https://www.python.org/downloads/
+2. Download Python for Windows.
+3. Install Python.
+4. Make sure Python is available from Command Prompt.
+
+Check your installation:
+
+```cmd
+py --version
+```
+
+### Step 2 — Open Terminal 11
+
+Open Command Prompt in the extracted Terminal 11 project folder.
+
+Run:
+
+```cmd
+py terminal11.py
+```
+
+Terminal 11 Ultimate should launch!
+
+### Step 3 — Enjoy!
+
+Explore the desktop, open the Start Menu, launch applications, and customize your experience.
+
+**Tip:** Press `F11` to toggle fullscreen mode.
+
+---
+
+## 🍓 Installing on Raspberry Pi 4
+
+### Requirements
+
+- Raspberry Pi 4
+- Raspberry Pi OS Desktop (64-bit recommended)
+- MicroSD card (16 GB minimum; 32 GB recommended)
+- Keyboard, mouse, and monitor
+- Internet connection
+
+### Step 1 — Install Raspberry Pi OS
+
+1. Download Raspberry Pi Imager from https://www.raspberrypi.com/software/
+2. Insert your microSD card into your computer.
+3. Open Raspberry Pi Imager.
+4. Select **Raspberry Pi 4**.
+5. Choose **Raspberry Pi OS (64-bit)** with a desktop.
+6. Select your microSD card.
+7. Write the operating system to the card.
+8. Insert the card into your Raspberry Pi and turn it on.
+
+**Warning:** Flashing the SD card erases its existing contents.
+
+### Step 2 — Update Raspberry Pi OS
+
+Open the Raspberry Pi terminal and run:
+
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+### Step 3 — Install Python and Tkinter
+
+```bash
+sudo apt install -y python3 python3-tk git
+```
+
+### Step 4 — Download Terminal 11
+
+Clone your GitHub repository:
+
+```bash
+git clone https://github.com/YOUR-USERNAME/Terminal11-Ultimate.git
+cd Terminal11-Ultimate
+```
+
+Alternatively, download the ZIP from GitHub and extract it.
+
+### Step 5 — Launch Terminal 11
+
+```bash
+python3 terminal11.py
+```
+
+Terminal 11 Ultimate should now open on your Raspberry Pi!
+
+---
+
+## ⚡ Optional — Start Terminal 11 Automatically
+
+You can configure Terminal 11 to launch when you log in to Raspberry Pi OS.
+
+Create an autostart directory:
+
+```bash
+mkdir -p ~/.config/autostart
+```
+
+Open a new desktop launcher file:
+
+```bash
+nano ~/.config/autostart/terminal11.desktop
+```
+
+Paste the following:
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=Terminal 11 Ultimate
+Exec=/usr/bin/python3 /home/YOUR-USERNAME/Terminal11-Ultimate/terminal11.py
+Path=/home/YOUR-USERNAME/Terminal11-Ultimate
+Terminal=false
+```
+
+Replace `YOUR-USERNAME` with your Raspberry Pi username and adjust the file path if necessary.
+
+Save using `Ctrl + O`, press Enter, and exit using `Ctrl + X`.
+
+Restart your Raspberry Pi:
+
+```bash
+sudo reboot
+```
+
+On desktop environments that support this autostart method, Terminal 11 should launch automatically after login.
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| F11 | Toggle fullscreen |
+| Esc | Exit fullscreen |
+| Ctrl + Alt + S | Open Start Menu |
+| Ctrl + Alt + T | Open built-in Terminal |
+
+Some shortcuts may conflict with existing operating-system shortcuts.
+
+---
+
+## 🛠️ Troubleshooting
+
+### Python is not installed
+
+Install Python and try again.
+
+### Error: No module named tkinter
+
+On Raspberry Pi OS:
+
+```bash
+sudo apt install python3-tk
+```
+
+On Windows, reinstall Python with Tkinter support enabled.
+
+### Terminal 11 won't launch
+
+Check that you're inside the project folder and that the file is named `terminal11.py`.
+
+On Raspberry Pi:
+
+```bash
+python3 terminal11.py
+```
+
+On Windows:
+
+```cmd
+py terminal11.py
+```
+
+Read any error messages displayed in the terminal.
+
+### The built-in Terminal won't run interactive programs
+
+The current terminal supports ordinary system commands, but full-screen interactive programs such as `nano` and `htop` may not work correctly.
+
+---
+
+## 💻 Supported Platforms
+
+| Platform | Support |
+|---|---|
+| Windows 11 | Supported |
+| Windows 10 | Supported |
+| Raspberry Pi 4 | Supported with Raspberry Pi OS Desktop |
+| Raspberry Pi 5 | Not yet verified |
+| Raspberry Pi OS Lite | Not supported without a graphical environment |
+| Bootable standalone `.img` | Planned |
+
+**Note:** Terminal 11 Ultimate is a Python desktop application, not Microsoft Windows or a standalone operating system.
+
+## ❤️ Enjoy Terminal 11 Ultimate!
+
+If you like the project, give the repository a ⭐ on GitHub!
+
+Contributions, bug reports, and feature suggestions are welcome.
